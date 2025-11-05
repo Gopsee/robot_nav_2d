@@ -1,0 +1,49 @@
+name: ROS 2 CI (Jazzy)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout your repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup ROS 2 (Jazzy)
+      - name: Setup ROS 2 environment
+        uses: ros-tooling/setup-ros@v0.7
+        with:
+          required-ros-distributions: jazzy
+
+      # 3. Install dependencies (optional)
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          rosdep update
+          rosdep install --from-paths src --ignore-src -r -y
+
+      # 4. Build your workspace
+      - name: Build workspace
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          colcon build --symlink-install --event-handlers console_cohesion+
+
+      # 5. Run tests
+      - name: Run tests
+        run: |
+          source install/setup.bash
+          colcon test --event-handlers console_direct+
+          colcon test-result --verbose
+
+      # 6. (Optional) Lint check
+      - name: Run linters
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          colcon test --packages-select path_smoothing trajectory_controller trajectory_generator --ctest-args -R lint
+
