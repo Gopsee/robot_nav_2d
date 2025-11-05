@@ -1,0 +1,55 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="arcadia" >
+    <xacro:property name="vzero" value="0 0 0"/>
+
+    <!-- Macro for adding simple frames that are fixed to base_link and save typing -->
+    <xacro:macro name="fixed_to_base" params="link_name xyz:=${vzero} rpy:=${vzero}">
+        <link name="${link_name}"/>
+        <joint name="base_link_to_${link_name}" type="fixed">
+            <origin xyz="${xyz}" rpy="${rpy}"/>
+            <parent link="base_link"/>
+            <child link="${link_name}"/>
+        </joint>
+    </xacro:macro>
+
+    <link name="base_link">
+        <visual>
+            <origin xyz="-0.02 -0.845 0.23" />
+            <geometry>
+                <mesh filename="package://robot_navigation_bringup/meshes/semisimple.dae" scale="1.0 1.0 1.0"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <xacro:fixed_to_base link_name="gps" xyz="0.03 0 0.57" />
+    <xacro:fixed_to_base link_name="zed" xyz="1.23 0 0.575"/>
+    <xacro:fixed_to_base link_name="center_link" xyz="1.5 0 0"/>
+
+    <!-- RS-16 - Specs from RS documentation -->
+    <xacro:property name="rslidar_length" value="0.0807" />
+    <xacro:property name="rslidar_diameter" value="0.109" />
+    <xacro:property name="rslidar_zoffset" value="0.0398" />
+
+    <!-- The rslidar_base is at the center of the bottom of the RS16 sensor which is easier to
+       measure. The rslidar frame is offset from there on Z 39.8mm as explained in the docs. -->
+    <link name="rslidar_base">
+        <visual>
+            <origin xyz="0 0 ${rslidar_length/2}" />
+            <geometry>
+                <cylinder radius="${rslidar_diameter/2}" length="${rslidar_length}"/>
+            </geometry>
+            <material name="gray"><color rgba="0.66 0.66 0.66 1" /></material>
+        </visual>
+    </link>
+    <joint name="base_link_to_rslidar_base" type="fixed">
+        <origin xyz="0.96 0 1" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="rslidar_base" />
+    </joint>
+    <link name="rslidar" />
+    <joint name="rslidar_base_to_rslidar" type="fixed">
+        <origin xyz="0 0 ${rslidar_zoffset}" />
+        <parent link="rslidar_base" />
+        <child link="rslidar" />
+    </joint>
+
+</robot>

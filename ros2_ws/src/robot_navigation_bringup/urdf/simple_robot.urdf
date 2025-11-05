@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<robot name="simple_bot">
+
+  <!-- Base -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.05"/>
+      <geometry>
+        <mesh filename="package://robot_navigation_bringup/meshes/base_link.stl" scale="1 1 1"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0.0 0.3 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://robot_navigation_bringup/meshes/base_link.stl" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Left wheel -->
+  <link name="left_wheel">
+    <visual>
+      <origin xyz="0.0 0.15 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_navigation_bringup/meshes/left_wheel.stl" scale="1 1 1"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="0.0 0.15 -0.05" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Right wheel -->
+  <link name="right_wheel">
+    <visual>
+      <origin xyz="0.0 -0.15 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_navigation_bringup/meshes/right_wheel.stl" scale="1 1 1"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="0.0 -0.15 -0.05" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+</robot>
