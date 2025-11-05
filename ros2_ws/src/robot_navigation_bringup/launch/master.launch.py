@@ -8,7 +8,7 @@ import xacro
 def generate_launch_description():
     bringup_dir = get_package_share_directory('robot_navigation_bringup')
 
-    xacro_file = os.path.join(bringup_dir, 'urdf', 'turtlebot3_burger.urdf.xacro')
+    xacro_file = os.path.join(bringup_dir, 'urdf', 'tractor.urdf.xacro')
     # urdf_file = os.path.join(bringup_dir, 'urdf', 'simple_robot.urdf')
     rviz_config = os.path.join(bringup_dir, 'config', 'turtlebot_nav.rviz')
 

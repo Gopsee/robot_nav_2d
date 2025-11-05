@@ -35,7 +35,7 @@ protected:
   std::shared_ptr<TrajectoryControllerNodeTestable> node_;
 };
 
-// ✅ TEST 1: handleGoal should accept valid goal
+// TEST 1: handleGoal should accept valid goal
 TEST_F(TrajectoryControllerTest, HandleGoalAcceptsValidGoal) {
   nav_msgs::msg::Path path;
   path.poses.resize(5);
@@ -47,14 +47,14 @@ TEST_F(TrajectoryControllerTest, HandleGoalAcceptsValidGoal) {
   EXPECT_EQ(response, rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE);
 }
 
-// ✅ TEST 2: handleCancel should accept cancellation
+// TEST 2: handleCancel should accept cancellation
 TEST_F(TrajectoryControllerTest, HandleCancelAcceptsCancel) {
   std::shared_ptr<GoalHandleFollowPath> handle;
   auto response = node_->handleCancel(handle);
   EXPECT_EQ(response, rclcpp_action::CancelResponse::ACCEPT);
 }
 
-// ✅ TEST 3: Odom callback updates internal state
+// TEST 3: Odom callback updates internal state
 TEST_F(TrajectoryControllerTest, OdomCallbackStoresMessage) {
   nav_msgs::msg::Odometry msg;
   msg.pose.pose.position.x = 1.0;
@@ -67,7 +67,7 @@ TEST_F(TrajectoryControllerTest, OdomCallbackStoresMessage) {
   EXPECT_DOUBLE_EQ(node_->current_odom_->pose.pose.position.y, 2.0);
 }
 
-// ✅ TEST 4: findLookaheadPoint returns correct lookahead point
+// TEST 4: findLookaheadPoint returns correct lookahead point
 TEST_F(TrajectoryControllerTest, FindLookaheadPointBasicTest) {
   nav_msgs::msg::Path path;
   for (int i = 0; i < 5; ++i) {
@@ -85,7 +85,7 @@ TEST_F(TrajectoryControllerTest, FindLookaheadPointBasicTest) {
   EXPECT_NEAR(lookahead.pose.position.y, 0.0, 0.1);
 }
 
-// ✅ TEST 5: findLookaheadPoint should return last pose if no valid segment
+// TEST 5: findLookaheadPoint should return last pose if no valid segment
 TEST_F(TrajectoryControllerTest, FindLookaheadPointFallback) {
   node_->trajectory_ = std::make_shared<nav_msgs::msg::Path>();
   geometry_msgs::msg::PoseStamped last_pose;

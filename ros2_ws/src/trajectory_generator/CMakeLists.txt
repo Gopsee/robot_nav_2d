@@ -5,20 +5,16 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# -------------------------------------------------------------
-# Dependencies
-# -------------------------------------------------------------
+
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_gtest REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(trajectory_controller REQUIRED)  # for FollowPath.action
+find_package(trajectory_controller REQUIRED)  
 
-# -------------------------------------------------------------
-# Library (for node + tests)
-# -------------------------------------------------------------
+
 add_library(trajectory_generator_lib
   src/trajectory_generator.cpp
 )
@@ -36,9 +32,7 @@ ament_target_dependencies(trajectory_generator_lib
   trajectory_controller
 )
 
-# -------------------------------------------------------------
-# Executable Node
-# -------------------------------------------------------------
+
 add_executable(trajectory_generator_node
   src/trajectory_generator_node.cpp
 )
@@ -55,9 +49,7 @@ ament_target_dependencies(trajectory_generator_node
   trajectory_controller
 )
 
-# -------------------------------------------------------------
-# Install
-# -------------------------------------------------------------
+
 install(TARGETS
   trajectory_generator_node
   trajectory_generator_lib
@@ -68,9 +60,7 @@ install(DIRECTORY include/
   DESTINATION include
 )
 
-# -------------------------------------------------------------
-# Unit Tests
-# -------------------------------------------------------------
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   set(ament_cmake_copyright_FOUND TRUE)
@@ -93,9 +83,7 @@ if(BUILD_TESTING)
   )
 endif()
 
-# -------------------------------------------------------------
-# Export
-# -------------------------------------------------------------
+
 ament_export_dependencies(
   rclcpp
   rclcpp_action
