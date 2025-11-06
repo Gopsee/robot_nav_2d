@@ -47,21 +47,19 @@ private:
   double v_, w_;             // Linear and angular velocity
   rclcpp::Time last_time_;
 
-    // Called whenever /cmd_vel is updated
   void cmdCallback(const geometry_msgs::msg::Twist::SharedPtr msg)
   {
     v_ = msg->linear.x;
     w_ = msg->angular.z;
   }
 
-    // Called at a fixed rate (e.g., 10 Hz)
   void update()
   {
     rclcpp::Time current_time = this->now();
     double dt = (current_time - last_time_).seconds();
     last_time_ = current_time;
 
-        // Integrate motion model
+    // Integrate motion model
     if (fabs(w_) < 1e-6) {
       x_ += v_ * dt * cos(theta_);
       y_ += v_ * dt * sin(theta_);
@@ -71,16 +69,14 @@ private:
       theta_ += w_ * dt;
     }
 
-        // Normalize angle
+    // Normalize angle
     if (theta_ > M_PI) {theta_ -= 2.0 * M_PI;} else if (theta_ < -M_PI) {theta_ += 2.0 * M_PI;}
 
-        // Quaternion for orientation
+    // Quaternion for orientation
     tf2::Quaternion q;
     q.setRPY(0, 0, theta_);
 
-        // -----------------
-        // Publish Odometry
-        // -----------------
+    // Publish Odometry
     nav_msgs::msg::Odometry odom;
     odom.header.stamp = current_time;
     odom.header.frame_id = "odom";
@@ -95,9 +91,7 @@ private:
 
     odom_pub_->publish(odom);
 
-        // -----------------
-        // Publish TF
-        // -----------------
+    // Publish TF
     geometry_msgs::msg::TransformStamped tf_msg;
     tf_msg.header.stamp = current_time;
     tf_msg.header.frame_id = "odom";
@@ -109,9 +103,7 @@ private:
     tf_msg.transform.rotation.w = q.w();
     tf_broadcaster_->sendTransform(tf_msg);
 
-        // -----------------
-        // Publish PoseStamped (optional for RViz)
-        // -----------------
+    // Publish PoseStamped (optional for RViz)
     geometry_msgs::msg::PoseStamped pose_msg;
     pose_msg.header.stamp = current_time;
     pose_msg.header.frame_id = "odom";

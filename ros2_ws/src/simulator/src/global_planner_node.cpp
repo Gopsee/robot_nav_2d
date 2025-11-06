@@ -35,7 +35,7 @@ public:
   }
 
 private:
-  struct Point { double x, y; };
+  struct Point { double x, y, theta; };
 
   void goalCallback(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
   {
@@ -98,9 +98,7 @@ private:
   }
 
 
-  // -----------------------------
   // Members
-  // -----------------------------
   std::string global_frame_;
   std::string base_frame_;
   int num_waypoints_;

@@ -357,8 +357,8 @@ void TrajectoryControllerNode::publishDebugMarkers(
     circle.id = 2;
     circle.type = visualization_msgs::msg::Marker::LINE_STRIP;
     circle.action = visualization_msgs::msg::Marker::ADD;
-    circle.scale.x = 0.03;
-    circle.color.r = 1.0;
+    circle.scale.x = 0.01;
+    circle.color.r = 0.1;
     circle.color.g = 0.0;
     circle.color.b = 0.0;
     circle.color.a = 0.8;
