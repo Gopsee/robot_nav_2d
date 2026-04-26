@@ -1,0 +1,30 @@
+# ROS 2 colcon build artifacts
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+ros2_ws/.pytest_cache/
+
+# Top-level colcon artifacts (if built from project root)
+build/
+install/
+log/
+
+# Graphify output
+graphify-out/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

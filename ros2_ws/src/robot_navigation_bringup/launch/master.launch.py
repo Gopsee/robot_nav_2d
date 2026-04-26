@@ -23,6 +23,7 @@ def generate_launch_description():
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
+        namespace='robot_1',
         output='screen',
         parameters=[{'robot_description': robot_desc}],
     )
@@ -31,6 +32,7 @@ def generate_launch_description():
         package='joint_state_publisher',
         executable='joint_state_publisher',
         name='joint_state_publisher',
+        namespace='robot_1',
         output='screen'
     )
 
@@ -38,6 +40,7 @@ def generate_launch_description():
     path_smoothing_node = Node(
         package='path_smoothing',
         executable='path_smoothing_node',
+        namespace='robot_1',
         output='screen',
         # remappings=[('/path_smoothing/smooth_path', '/trajectory_generator/smooth_path')]
     )
@@ -45,6 +48,7 @@ def generate_launch_description():
     trajectory_generator_node = Node(
         package='trajectory_generator',
         executable='trajectory_generator_node',
+        namespace='robot_1',
         output='screen',
         # remappings=[('/path_smoothing/smooth_path', '/trajectory_generator/smooth_path')]
     )
@@ -52,6 +56,7 @@ def generate_launch_description():
     trajectory_controller_node = Node(
         package='trajectory_controller',
         executable='trajectory_controller_node',
+        namespace='robot_1',
         output='screen',
         # remappings=[('/trajectory_controller/cmd_vel', '/cmd_vel')]
     )
@@ -59,14 +64,33 @@ def generate_launch_description():
     simulator_node = Node(
         package='simulator',
         executable='simple_localization_node',
-        output='screen'
+        namespace='robot_1',
+        output='screen',
+        remappings=[
+            ('/cmd_vel',        'cmd_vel'),
+            ('/odom',           'odom'),
+            ('/estimated_pose', 'estimated_pose'),
+        ],
     )
 
     global_planner_node = Node(
         package='simulator',
         executable='global_planner_node',
+        namespace='robot_1',
         output='screen',
-        # remappings=[('/global_planner/input_path', '/path_smoothing/input_path')]
+    )
+
+    lidar_node = Node(
+        package='simulator',
+        executable='lidar_node',
+        namespace='robot_1',
+        output='screen',
+        remappings=[
+            ('/estimated_pose', 'estimated_pose'),
+            ('/scan',           'scan'),
+            ('/point_cloud',    'point_cloud'),
+            ('/obstacles',      'obstacles'),
+        ],
     )
 
     rviz_node = Node(
@@ -90,6 +114,13 @@ def generate_launch_description():
         name='static_tf_map_odom',
         arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom']
     )
+
+    static_tf_rslidar = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_tf_rslidar_base',
+        arguments=['0', '0', '0.99', '0', '0', '0', 'base_link', 'rslidar_base']
+    )
     
     return LaunchDescription([
         robot_state_publisher_node,
@@ -99,7 +130,9 @@ def generate_launch_description():
         trajectory_controller_node,
         simulator_node,
         global_planner_node,
+        lidar_node,
         rviz_node,
         static_tf_base_link,
-        static_tf_map_odom
+        static_tf_map_odom,
+        static_tf_rslidar,
     ])

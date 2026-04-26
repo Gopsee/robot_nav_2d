@@ -69,6 +69,12 @@ def generate_launch_description():
         # remappings=[('/global_planner/input_path', '/path_smoothing/input_path')]
     )
 
+    lidar_node = Node(
+        package='simulator',
+        executable='lidar_node',
+        output='screen',
+    )
+
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
@@ -90,6 +96,13 @@ def generate_launch_description():
         name='static_tf_map_odom',
         arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom']
     )
+
+    static_tf_rslidar = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_tf_rslidar_base',
+        arguments=['0', '0', '0.99', '0', '0', '0', 'base_link', 'rslidar_base']
+    )
     
     return LaunchDescription([
         robot_state_publisher_node,
@@ -99,7 +112,9 @@ def generate_launch_description():
         trajectory_controller_node,
         simulator_node,
         global_planner_node,
+        lidar_node,
         rviz_node,
         static_tf_base_link,
-        static_tf_map_odom
+        static_tf_map_odom,
+        static_tf_rslidar,
     ])

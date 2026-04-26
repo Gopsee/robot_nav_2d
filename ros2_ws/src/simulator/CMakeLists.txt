@@ -12,6 +12,8 @@ find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(visualization_msgs REQUIRED)
 
 # Simple localization node
 add_executable(simple_localization_node src/simple_localization_node.cpp)
@@ -32,9 +34,27 @@ ament_target_dependencies(global_planner_node
   tf2_geometry_msgs
 )
 
+# Lidar simulation node
+add_executable(lidar_node src/lidar_node.cpp)
+ament_target_dependencies(lidar_node
+  rclcpp
+  sensor_msgs
+  geometry_msgs
+  visualization_msgs
+)
+
+# Random goal publisher
+add_executable(random_goal_node src/random_goal_node.cpp)
+ament_target_dependencies(random_goal_node
+  rclcpp
+  geometry_msgs
+)
+
 install(TARGETS
   simple_localization_node
   global_planner_node
+  lidar_node
+  random_goal_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
